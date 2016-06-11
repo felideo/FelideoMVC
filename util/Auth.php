@@ -1,20 +1,19 @@
 <?php
 namespace Util;
-
+use Libs;
 /**
-* 
+*
 */
-class Auth
-{
-	
-	public static function handLeLoggin()
-	{
+class Auth {
+	public static function handLeLoggin() {
 		@session_start();
-		$logged = $_SESSION['loggedIn'];
-		if($logged == false) {
-			session_destroy();
-			header('location: login');
-			exit;
-		}		
+		if(isset($_SESSION['loggedIn'])){
+			$logged = $_SESSION['loggedIn'];
+		} else {
+			$logged = false;
+			// session_destroy();
+			// header('location: login');
+			// exit;
+		}
 	}
 }

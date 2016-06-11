@@ -4,37 +4,55 @@ namespace Models;
 use Libs;
 
 /**
-* 
+*
 */
-class Login_Model extends \Libs\Model
-{
-	
+class Login_Model extends \Libs\Model {
+
 	function __construct()
 	{
 		parent::__construct();
 	}
 
-	function run()
-	{
-		$sth = $this->db->prepare("SELECT userid, role FROM user WHERE 
-			username = :username AND password = :password");
+	function run() {
+		$sth = $this->db->prepare("SELECT * FROM usuario WHERE
+			email = :email AND senha = :senha");
+
+
 
 		$sth->execute(array(
-			':username' => $_POST['username'],
-			':password' => \Libs\Hash::create('sha256', $_POST['password'], HASH_PASSWORD_KEY)
+			':email' => $_POST['email'],
+			// ':senha' => \Libs\Hash::create('sha256', $_POST['senha'], HASH_senha_KEY)
+			':senha' => $_POST['senha']
 		));
 
 		$data = $sth->fetch();
 
+		debug2();
+
 		$count = $sth->rowCount();
 
+		$modulos = $this->db->select('SELECT * FROM modulos');
+		foreach ($modulos as $indice => $modulo) {
+			$modulos[$modulo['modulo']] = $modulo;
+			unset($modulos[$indice]);
+		}
+
 		if($count > 0) {
+
+			$user = [
+				'id' => $data['userid'],
+				'nome' => $data['email'],
+				'hierarquia' => $data['hierarquia'],
+
+			];
+
 			// login
 			\Libs\Session::init();
-			\Libs\Session::set('role', $data['role']);
 			\Libs\Session::set('loggedIn', true);
-			\Libs\Session::set('userid', $data['userid']);
-			header('location: ../dashboard');
+			\Libs\Session::set('usuario', $user);
+			\Libs\Session::set('modulos', $modulos);
+
+			header('location: ../painel_controle');
 		} else {
 			header('location: ../login');
 		}
