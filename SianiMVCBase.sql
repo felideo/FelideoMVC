@@ -37,3 +37,6 @@ VALUES
 
 INSERT INTO `usuario` VALUES ('1', 'felideo@gmail.com', '12345', '0', '1');
 
+ALTER TABLE `modulo`
+    ADD COLUMN `submenu` 		varchar(64) NULL AFTER `nome`,
+    ADD COLUMN `submenu_icone` 	varchar(64) NULL AFTER `submenu`;
