@@ -52,8 +52,7 @@ class Login_Model extends \Libs\Model {
 			\Libs\Session::set('logado', true);
 			\Libs\Session::set('usuario', $user);
 			\Libs\Session::set('modulos', $modulos);
-
-
+			\Libs\Session::set('menus', $menus);
 
 			header('location: ../painel_controle');
 		} else {
