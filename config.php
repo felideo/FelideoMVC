@@ -3,7 +3,7 @@
 date_default_timezone_set('America/Sao_Paulo');
 
 // Sempre use barra (/) no final das URLs
-define('URL', 'http://teste.localhost/SianiMVCBase/');
+define('URL', 'http://teste.localhost/sianimvcbase/');
 define('LIBS', 'libs/');
 
 // Configuração com Banco de Dados
