@@ -16,11 +16,8 @@ class bootstrap {
 			return false;
 		}
 
-
 		$amp = $this->identificar_arquivo_metoro_parametro($url);
 
-		// debug2($amp);
-		// exit;
 		if(file_exists($amp['arquivo'])) {
 			require $amp['arquivo'];
 		} else {
@@ -59,6 +56,8 @@ class bootstrap {
 		$file = 'controllers/';
 
 		foreach ($url as $indice => $value) {
+
+
 			$file .= $value . '/';
 
 			// if($indice == (count($url) - 1)) {
@@ -96,10 +95,7 @@ class bootstrap {
 	 * É chamado quando um controlador ou seu método ñ existir
 	 */
 	public function error() {
-		require 'controllers/error/error.php';
-		$controller = new \Controllers\Error();
-		$controller->index();
-		return false;
+		header('location: ' . URL . 'error');
 	}
 
 }
