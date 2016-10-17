@@ -4,12 +4,9 @@ namespace Libs;
 /**
 * classe Bootstrap
 */
-class Bootstrap {
-	function __construct($twig) {
-		$url = isset($_GET['url']) ? $_GET['url'] : null;
-		$url = rtrim($url, '/');
-		$url = filter_var($url, FILTER_SANITIZE_URL);
-		$url = explode('/', $url);
+class bootstrap {
+	function __construct() {
+		$url = $this->get_url();
 
 		if(empty($url[0])) {
 			require 'controllers/index/index.php';
@@ -19,56 +16,78 @@ class Bootstrap {
 			return false;
 		}
 
-		$file = 'controllers/';
-		$method = 0;
+		$amp = $this->identificar_arquivo_metoro_parametro($url);
 
-		foreach ($url as $indice => $value) {
-			$file .= $value . '/';
-
-			if($indice == (count($url) - 1)) {
-				$file .= $url[$indice] . ".php";
-				$remove = '\\' . $url[$indice] . ".php";
-			}
-
-			if( !file_exists($file)){
-				$method = $indice;
-			}
-		}
-
-		if(!empty($method)){
-			$file = str_replace(
-				$url[$method] . '/' . $url[$method] . '.php',
-				$url[($method - 1)], $file
-			) . '.php';
-		}
-
-		$view = str_replace("controllers/", 'views/', $file);
-		$view = str_replace(".php", '', $file);
-
-		if(file_exists($file)) {
-			require $file;
+		if(file_exists($amp['arquivo'])) {
+			require $amp['arquivo'];
 		} else {
 			$this->error();
 			exit();
 		}
 
-		$instancia_controller = '\\Controllers\\' . $url[0];
+		$instancia_controller = '\\controllers\\' . $amp['classe'];
+		$controller = new $instancia_controller;
 
-		$file = str_replace('.php', '', $file);
-
-		$controller = new $instancia_controller($twig);
-
-		if(!empty($url[($method - 1)])){
-			$controller->loadModel($url[($method - 1)]);
-		} else {
-			$controller->loadModel($url[($method)]);
+		if(!empty($amp['classe'])){
+			$controller->loadModel($amp['classe']);
 		}
 
-		if(method_exists($controller, $url[$method])) {
-			$controller->{$url[$method]}();
+		if(method_exists($controller, $amp['metodo'])) {
+			if(!empty($amp['parametros'])){
+				$controller->{$amp['metodo']}($amp['parametros']);
+			} else {
+				$controller->{$amp['metodo']}();
+			}
 		} else {
 			$controller->index();
 		}
+	}
+
+	private function get_url(){
+		$url = isset($_GET['url']) ? $_GET['url'] : null;
+		$url = rtrim($url, '/');
+		$url = filter_var($url, FILTER_SANITIZE_URL);
+		$url = explode('/', $url);
+
+		return $url;
+	}
+
+	private function identificar_arquivo_metoro_parametro($url){
+		$file = 'controllers/';
+
+		foreach ($url as $indice => $value) {
+
+
+			$file .= $value . '/';
+
+			// if($indice == (count($url) - 1)) {
+			// 	$file .= $url[$indice] . ".php";
+			// 	$arquivo = $file;
+			// 	$class = $url[$indice];
+			// } else {
+				if(file_exists($file . $url[$indice] . '.php')){
+					$arquivo = $file . $url[$indice] . '.php';
+					$class = $url[$indice];
+				}
+
+				if(!file_exists($file . $url[$indice] . '.php')){
+					$method[] = $url[$indice];
+				}
+			// }
+		}
+
+		if(isset($method)){
+			$metodo = $method[0];
+			unset($method[0]);
+		}
+
+		return [
+			'arquivo' 		=> $arquivo,
+			'classe' 		=> $class,
+			'metodo' 		=> isset($metodo) ? $metodo : null,
+			'parametros' 	=> isset($method) ? array_values($method) : null
+
+		];
 	}
 
 	/**
@@ -76,10 +95,7 @@ class Bootstrap {
 	 * É chamado quando um controlador ou seu método ñ existir
 	 */
 	public function error() {
-		require 'controllers/error/error.php';
-		$controller = new \Controllers\Error();
-		$controller->index();
-		return false;
+		header('location: ' . URL . 'error');
 	}
 
 }
