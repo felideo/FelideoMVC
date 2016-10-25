@@ -14,18 +14,22 @@ class Modulo extends \Libs\Controller {
 	function __construct() {
 		parent::__construct();
 		\Util\Auth::handLeLoggin();
-		\Util\Permission::check();
+
 
 		$this->view->modulo = $this->modulo;
 	}
 
 	public function index() {
+		\Util\Permission::check($this->modulo['modulo'], $this->modulo['modulo'] . "_" . "visualizar");
+
 		$this->view->modulo_list = $this->model->load_modulo_list($this->modulo['modulo']);
 		$this->view->submenu_list = $this->model->load_active_list('submenu');
 		$this->view->render($this->modulo['modulo'] . '/listagem/listagem');
 	}
 
 	public function editar($id) {
+		\Util\Permission::check($this->modulo['modulo'], $this->modulo['modulo'] . "_" . "editar");
+
 		$this->view->cadastro = $this->model->full_load_by_id('modulo', $id[0])[0];
 		$this->view->submenu_list = $this->model->load_active_list('submenu');
 		$this->view->render($this->modulo['modulo'] . '/editar/editar');
@@ -72,6 +76,8 @@ class Modulo extends \Libs\Controller {
 	}
 
 	public function delete($id) {
+		\Util\Permission::check($this->modulo['modulo'], $this->modulo['modulo'] . "_" . "cu");
+
 		$retorno = $this->model->delete($this->modulo['modulo'], $id[0]);
 
 		if($retorno['status']){
