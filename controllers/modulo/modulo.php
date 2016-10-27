@@ -46,7 +46,7 @@ class Modulo extends \Libs\Controller {
 		$retorno = $this->model->create($this->modulo['modulo'], $insert_db);
 
 		if($retorno['status']){
-			$retorno_permissoes = $this->model->permissoes_basicas($this->modulo['modulo'], $retorno['id']);
+			$retorno_permissoes = $this->model->permissoes_basicas($insert_db['modulo'], $retorno['id']);
 		}
 
 		if($retorno['status'] && $retorno_permissoes[count($retorno_permissoes)]['erros'] == 0){
@@ -91,3 +91,6 @@ class Modulo extends \Libs\Controller {
 		header('location: ' . URL . $this->modulo['modulo']);
 	}
 }
+
+
+
