@@ -2,10 +2,11 @@
     <h1 class="page-header"><?php echo $this->modulo['name']; ?></h1>
 </div>
 
-<?php // include_once '../Bio-SenseLab/views/' . $this->modulo['modulo'] . '/form/form.php'; ?>
+<?php //include_once '../' . strtolower(APP_NAME) . '/views/' . $this->modulo['modulo'] . '/form/form.php'; ?>
 
 <div style="display: block; clear: both;">
-<!-- <div class="col-lg-12">
+<!--
+<div class="col-lg-12">
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="dataTable_wrapper">

@@ -22,12 +22,32 @@ class Database extends \PDO {
 	 * return mixed
 	 */
 	public function select($sql, $array = array(), $fetchMode = \PDO::FETCH_ASSOC) {
-		$sth = $this->prepare($sql);
-		foreach($array as $key => $value) {
-			$sth->bindValue("$key", $value);
+		$prevent_cache = '';
+
+		if(PREVENT_CACHE){
+			$prevent_cache = '/* ' . date('Y-m-d H:i:s') . '*/ ';
+			$sql = $prevent_cache . $sql;
 		}
 
-		$sth->execute();
+		$sth = $this->prepare($sql);
+		if(isset($array) && !empty($array)){
+			foreach($array as $key => $value) {
+				$sth->bindValue("$key", $value);
+			}
+		}
+
+		$retorno = [
+			$sth->execute(),
+			$sth->errorCode(),
+			$sth->errorInfo()
+		];
+
+		if(isset($retorno[2][2]) && !empty($retorno[2][2])){
+			return [
+				'error' => $retorno[2],
+				'backtrace' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS)
+			];
+		}
 
 		return $sth->fetchAll($fetchMode);
 	}
@@ -40,7 +60,7 @@ class Database extends \PDO {
 	public function insert($table, $data) {
 		ksort($data);
 
-		$fieldNames = implode('`, `', array_keys($data));
+		$fieldNames  = implode('`, `', array_keys($data));
 		$fieldValues = ':' . implode(', :', array_keys($data));
 
 		$sth = $this->prepare("INSERT INTO $table (`$fieldNames`) VALUES ($fieldValues)");

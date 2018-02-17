@@ -1,11 +1,7 @@
 <?php
 namespace Libs;
 
-/**
-*
-*/
 class Session {
-
 	public static function init(){
 		@session_start();
 	}
@@ -20,7 +16,7 @@ class Session {
 	}
 
 	public static function destroy(){
-		// unset($_SESSION);
+		unset($_SESSION);
 		session_destroy();
 	}
 }

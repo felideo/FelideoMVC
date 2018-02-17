@@ -6,7 +6,7 @@ use Libs;
 */
 class Auth {
 	public static function handLeLoggin() {
-		$url = \util\url::modulo_url($_GET['url']);
+		$url = \Util\URL::modulo_url($_GET['url']);
 
 		if(isset($_SESSION) && !empty($_SESSION['logado'])){
 			if($url[0] == 'login'){
@@ -19,7 +19,7 @@ class Auth {
 				$logged = false;
 			} else {
 				$logged = false;
-				header('location: ' . URL . 'login');
+				header('location: ../index');
 				exit;
 			}
 		}

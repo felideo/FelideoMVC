@@ -1,0 +1,32 @@
+{include file='views/back/form_padrao/header.html'}
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="form-group">
+        <label>Email</label>
+        <input class="form-control validar_email email_unico letras_e_numeros remover_caracteres_especiais" {if isset($cadastro)} disabled {/if} name="{$modulo.modulo}[{$modulo.modulo}][email]" value="{if isset($cadastro)}{$cadastro['email']}{/if}" required>
+    </div>
+    <div class="form-group">
+        <label>Hierarquia</label>
+         <br>
+         <select class="form-group span12" name="{$modulo.modulo}[{$modulo.modulo}][hierarquia]" >
+            <option disabled>Selecnione</option>
+            {foreach from=$hierarquia_list item=hierarquia}
+                <option value="{$hierarquia.id}" {if $hierarquia['id'] == $cadastro['hierarquia']} selected {/if}>
+                    {$hierarquia.nome}
+                </option>
+            {/foreach}
+         </select>
+    </div>
+</div>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="form-group">
+        <label>Nome</label>
+        <input class="form-control embelezar_string letras_e_numeros" name="{$modulo.modulo}[pessoa][nome]" value="{if isset($cadastro)}{$cadastro['pessoa'][0]['nome']}{/if}" type="text" required >
+    </div>
+
+    <div class="form-group">
+        <label>Sobrenome</label>
+        <input class="form-control embelezar_string letras_e_numeros" name="{$modulo.modulo}[pessoa][sobrenome]" value="{if isset($cadastro)}{$cadastro['pessoa'][0]['sobrenome']}{/if}" type="text" required >
+    </div>
+</div>
+{include file='views/back/form_padrao/footer.html'}
