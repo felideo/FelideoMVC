@@ -18,7 +18,7 @@ define('DB_PASS', 'lilith');
 define('DEVELOPER', true);
 define('PREVENT_CACHE', true);
 
-define('APP_NAME', 'Felideo MVC');
+define('APP_NAME', 'Teste');
 
 if(function_exists('xdebug_disable')){
 		xdebug_disable();
