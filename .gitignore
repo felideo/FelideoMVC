@@ -1,0 +1,14 @@
+license
+mvc.sql
+readme.md
+*.fuse_hidden*
+php_errors.log
+template_compile/*
+uploads/thumbnails/*
+uploads/trabalhos/*
+uploads/banners/*
+views/plataforma/*
+config.php
+vendor/*
+composer.lock
+views/template_compile/*
