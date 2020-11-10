@@ -1,3 +1,5 @@
 User-agent: *
-Allow: /uploads/
-Disallow: /template_compile/
+Disallow: /public/
+Disallow: /core/views/template_compile/
+Disallow: /core/views/public/
+Allow: /public/uploads/
